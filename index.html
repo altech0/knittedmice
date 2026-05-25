@@ -687,12 +687,12 @@
     Start
   </button>
   <div class="taskbar-divider"></div>
-  <button class="taskbar-btn active" id="tb-about" onclick="toggleWindow('about')"><span data-icon="about"></span> About</button>
-  <button class="taskbar-btn" id="tb-history" onclick="toggleWindow('history')"><span data-icon="history"></span> History</button>
-  <button class="taskbar-btn" id="tb-interests" onclick="toggleWindow('interests')"><span data-icon="interests"></span> Interests</button>
-  <button class="taskbar-btn" id="tb-projects" onclick="toggleWindow('projects')"><span data-icon="projects"></span> Projects</button>
-  <button class="taskbar-btn" id="tb-contact" onclick="toggleWindow('contact')"><span data-icon="contact"></span> Contact</button>
-  <button class="taskbar-btn" id="tb-queens" onclick="toggleWindow('queens')"><span data-icon="queens"></span> Queens</button>
+  <button class="taskbar-btn" id="tb-about"     onclick="toggleWindow('about')"     style="display:none"><span data-icon="about"></span> About</button>
+  <button class="taskbar-btn" id="tb-history"   onclick="toggleWindow('history')"   style="display:none"><span data-icon="history"></span> History</button>
+  <button class="taskbar-btn" id="tb-interests" onclick="toggleWindow('interests')" style="display:none"><span data-icon="interests"></span> Interests</button>
+  <button class="taskbar-btn" id="tb-projects"  onclick="toggleWindow('projects')"  style="display:none"><span data-icon="projects"></span> Projects</button>
+  <button class="taskbar-btn" id="tb-contact"   onclick="toggleWindow('contact')"   style="display:none"><span data-icon="contact"></span> Contact</button>
+  <button class="taskbar-btn" id="tb-queens"    onclick="toggleWindow('queens')"    style="display:none"><span data-icon="queens"></span> Queens</button>
   <div class="taskbar-clock" id="clock"></div>
 </div>
 
@@ -748,13 +748,15 @@ document.querySelectorAll('[data-icon]').forEach(el => {
 // ── Window management ────────────────────────────────────────────────────────
 const windows = ['about', 'history', 'interests', 'projects', 'contact', 'queens'];
 let zCounter = 100;
+const openWins = new Set();
+const minWins  = new Set();
 
 function getEl(id) { return document.getElementById(id + '-window'); }
 function getTb(id) { return document.getElementById('tb-' + id); }
 
 function bringToFront(id) {
   windows.forEach(w => {
-    getEl(w).classList.remove('active');
+    getEl(w)?.classList.remove('active');
     document.getElementById(w + '-title')?.classList.add('inactive');
     getTb(w)?.classList.remove('active');
   });
@@ -765,23 +767,41 @@ function bringToFront(id) {
   getTb(id)?.classList.add('active');
 }
 
+function openWindow(id) {
+  getEl(id).classList.add('open');
+  openWins.add(id);
+  minWins.delete(id);
+  getTb(id).style.display = 'flex';
+  bringToFront(id);
+}
+
 function toggleWindow(id) {
-  const el = getEl(id);
-  if (el.classList.contains('open')) {
-    if (el.classList.contains('active')) closeWindow(id);
+  if (minWins.has(id)) {
+    openWindow(id);
+  } else if (openWins.has(id)) {
+    if (getEl(id).classList.contains('active')) minimizeWindow(id);
     else bringToFront(id);
   } else {
-    el.classList.add('open');
-    bringToFront(id);
+    openWindow(id);
   }
 }
 
 function closeWindow(id) {
   getEl(id).classList.remove('open', 'active');
+  document.getElementById(id + '-title')?.classList.add('inactive');
+  openWins.delete(id);
+  minWins.delete(id);
+  getTb(id).style.display = 'none';
   getTb(id)?.classList.remove('active');
 }
 
-function minimizeWindow(id) { closeWindow(id); }
+function minimizeWindow(id) {
+  getEl(id).classList.remove('open', 'active');
+  document.getElementById(id + '-title')?.classList.add('inactive');
+  openWins.delete(id);
+  minWins.add(id);
+  getTb(id)?.classList.remove('active');
+}
 
 windows.forEach(id => {
   getEl(id).addEventListener('mousedown', () => bringToFront(id));
@@ -830,13 +850,7 @@ async function getQToken() {
 }
 
 function openQueens() {
-  const el = getEl('queens');
-  if (!el.classList.contains('open')) {
-    el.classList.add('open');
-    bringToFront('queens');
-  } else {
-    bringToFront('queens');
-  }
+  toggleWindow('queens');
 }
 
 async function queensNewGame() {
