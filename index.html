@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Satur</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gray: #c0c0c0;
+      --dark-gray: #808080;
+      --darker-gray: #404040;
+      --white: #ffffff;
+      --black: #000000;
+      --navy: #000080;
+      --desktop: #008080;
+      --raised: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+      --sunken: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+    }
+
+    body {
+      background: var(--desktop);
+      font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Arial, sans-serif;
+      font-size: 11px;
+      min-height: 100vh;
+      padding-bottom: 40px;
+      overflow-x: hidden;
+    }
+
+    /* ── Icons ── */
+    [data-icon] svg, [data-icon] img { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+    [data-icon] { display: inline-flex; align-items: center; justify-content: center; }
+    .icon-img [data-icon] svg, .icon-img [data-icon] img { width: 32px; height: 32px; }
+    .title-bar-icon [data-icon] svg, .title-bar-icon [data-icon] img { width: 16px; height: 16px; }
+    .taskbar-btn [data-icon] svg, .taskbar-btn [data-icon] img { width: 16px; height: 16px; }
+    .photo-placeholder [data-icon] svg, .photo-placeholder [data-icon] img { width: 64px; height: 64px; }
+    .project-icon [data-icon] svg, .project-icon [data-icon] img { width: 36px; height: 36px; }
+    .start-logo svg { width: 16px; height: 16px; image-rendering: pixelated; }
+
+    /* ── Desktop ── */
+    .desktop {
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .desktop-icons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 8px;
+    }
+
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      width: 72px;
+      text-align: center;
+      color: white;
+      text-shadow: 1px 1px var(--black);
+      font-size: 11px;
+      user-select: none;
+      padding: 4px;
+    }
+
+    .desktop-icon:hover .icon-img { outline: 1px dotted white; }
+    .icon-img { display: flex; align-items: center; justify-content: center; }
+
+    /* ── Windows ── */
+    .windows-area {
+      flex: 1;
+      position: relative;
+      min-height: calc(100vh - 60px);
+    }
+
+    .window {
+      position: absolute;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      min-width: 280px;
+      display: none;
+    }
+
+    .window.open { display: block; }
+    .window.active { z-index: 100; }
+
+    .title-bar {
+      background: linear-gradient(to right, var(--navy), #1084d0);
+      color: white;
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: default;
+      user-select: none;
+      font-weight: bold;
+      font-size: 11px;
+      gap: 4px;
+    }
+
+    .title-bar.inactive {
+      background: linear-gradient(to right, var(--dark-gray), #b0b0b0);
+    }
+
+    .title-bar-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .title-bar-icon { display: flex; align-items: center; }
+
+    .title-bar-controls { display: flex; gap: 2px; flex-shrink: 0; }
+
+    .title-btn {
+      width: 16px;
+      height: 14px;
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      cursor: pointer;
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-family: 'MS Sans Serif', Arial, sans-serif;
+      color: black;
+    }
+
+    .title-btn:active { box-shadow: var(--sunken); }
+
+    .window-body {
+      padding: 8px;
+      overflow: auto;
+      max-height: 70vh;
+    }
+
+    /* ── Menu bar ── */
+    .menu-bar {
+      display: flex;
+      background: var(--gray);
+      padding: 2px 0;
+      border-bottom: 1px solid var(--dark-gray);
+    }
+
+    .menu-item { padding: 2px 8px; cursor: default; font-size: 11px; }
+    .menu-item:hover { background: var(--navy); color: white; }
+
+    /* ── Content ── */
+    .section-header {
+      background: var(--navy);
+      color: white;
+      padding: 2px 6px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .field-label { font-weight: bold; min-width: 80px; flex-shrink: 0; }
+
+    .inset-box {
+      box-shadow: var(--sunken);
+      background: white;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+    }
+
+    .photo-placeholder {
+      box-shadow: var(--sunken);
+      background: #d4d0c8;
+      width: 120px;
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--dark-gray);
+    }
+
+    .photo-caption {
+      font-size: 10px;
+      color: var(--dark-gray);
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .about-layout { display: flex; gap: 12px; align-items: flex-start; }
+    .about-text { flex: 1; }
+
+    hr.win95 {
+      border: none;
+      border-top: 1px solid var(--dark-gray);
+      border-bottom: 1px solid white;
+      margin: 8px 0;
+    }
+
+    .timeline-item { display: flex; gap: 8px; margin-bottom: 10px; }
+    .timeline-year { font-weight: bold; min-width: 40px; color: var(--navy); }
+    .timeline-content { flex: 1; }
+    .timeline-title { font-weight: bold; }
+    .timeline-sub { color: var(--darker-gray); font-size: 10px; }
+
+    .interest-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .interest-item {
+      box-shadow: var(--raised);
+      padding: 6px;
+      text-align: center;
+      background: var(--gray);
+    }
+
+    .interest-icon { font-size: 20px; display: block; margin-bottom: 3px; }
+
+    .project-card {
+      box-shadow: var(--raised);
+      padding: 8px;
+      margin-bottom: 8px;
+      background: var(--gray);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .project-icon { flex-shrink: 0; display: flex; }
+    .project-info { flex: 1; }
+    .project-name { font-weight: bold; margin-bottom: 3px; }
+    .project-desc { color: var(--darker-gray); margin-bottom: 6px; }
+
+    .btn {
+      box-shadow: var(--raised);
+      background: var(--gray);
+      border: none;
+      padding: 3px 12px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+    }
+
+    .btn:active { box-shadow: var(--sunken); }
+    .btn:hover { background: #d4d0c8; }
+
+    .status-bar {
+      display: flex;
+      gap: 2px;
+      padding: 2px 4px;
+      border-top: 1px solid var(--dark-gray);
+      margin-top: 4px;
+    }
+
+    .status-item {
+      box-shadow: var(--sunken);
+      padding: 1px 6px;
+      flex: 1;
+      font-size: 10px;
+      color: var(--darker-gray);
+    }
+
+    /* ── Taskbar ── */
+    .taskbar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 38px;
+      background: var(--gray);
+      box-shadow: inset 0 1px white;
+      display: flex;
+      align-items: center;
+      padding: 2px 4px;
+      gap: 4px;
+      z-index: 999;
+    }
+
+    .start-btn {
+      background: var(--gray);
+      box-shadow: var(--raised);
+      border: none;
+      padding: 3px 8px;
+      font-weight: bold;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 28px;
+    }
+
+    .start-btn:active { box-shadow: var(--sunken); }
+
+    .taskbar-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--dark-gray);
+      box-shadow: 1px 0 white;
+      margin: 0 2px;
+    }
+
+    .taskbar-btn {
+      box-shadow: var(--raised);
+      background: var(--gray);
+      border: none;
+      padding: 2px 8px;
+      font-family: inherit;
+      font-size: 11px;
+      cursor: pointer;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      max-width: 140px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .taskbar-btn.active { box-shadow: var(--sunken); background: #d4d0c8; }
+    .taskbar-btn:hover { background: #d4d0c8; }
+
+    .taskbar-clock {
+      margin-left: auto;
+      box-shadow: var(--sunken);
+      padding: 2px 8px;
+      font-size: 11px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── Queens game ── */
+    .queens-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      background: var(--gray);
+      border-bottom: 1px solid var(--dark-gray);
+    }
+    .queens-toolbar select {
+      font-family: inherit;
+      font-size: 11px;
+      background: white;
+      border: none;
+      box-shadow: var(--sunken);
+      padding: 1px 2px;
+      height: 20px;
+    }
+    .queens-body {
+      padding: 6px;
+      display: flex;
+      justify-content: center;
+      overflow: auto;
+    }
+    .queens-grid td {
+      box-sizing: border-box;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+    .queens-grid td:hover { filter: brightness(0.92); }
+    .queens-grid td.q-queen { color: #000; }
+    .queens-grid td.q-x { color: #606060; }
+    .queens-grid td.q-conflict { outline: 2px solid red; outline-offset: -2px; }
+    .queens-win-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(192,192,192,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .queens-win-dialog {
+      background: var(--gray);
+      box-shadow: var(--raised);
+      padding: 0;
+      min-width: 220px;
+      text-align: center;
+    }
+    .queens-win-dialog .title-bar { cursor: default; }
+    .queens-win-dialog-body { padding: 16px 20px 12px; }
+    .queens-win-dialog-body p { margin-bottom: 12px; }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .windows-area { min-height: unset; }
+      .window {
+        position: static !important;
+        width: 100% !important;
+        display: block !important;
+        margin-bottom: 8px;
+      }
+      .desktop { flex-direction: column; padding: 6px; }
+      .desktop-icons { flex-direction: row; flex-wrap: wrap; }
+      .interest-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-layout { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="desktop">
+  <div class="desktop-icons">
+    <div class="desktop-icon" onclick="toggleWindow('about')">
+      <div class="icon-img"><span data-icon="about"></span></div>
+      <div>About</div>
+    </div>
+    <div class="desktop-icon" onclick="toggleWindow('history')">
+      <div class="icon-img"><span data-icon="history"></span></div>
+      <div>History</div>
+    </div>
+    <div class="desktop-icon" onclick="toggleWindow('interests')">
+      <div class="icon-img"><span data-icon="interests"></span></div>
+      <div>Interests</div>
+    </div>
+    <div class="desktop-icon" onclick="toggleWindow('projects')">
+      <div class="icon-img"><span data-icon="projects"></span></div>
+      <div>Projects</div>
+    </div>
+    <div class="desktop-icon" onclick="toggleWindow('contact')">
+      <div class="icon-img"><span data-icon="contact"></span></div>
+      <div>Contact</div>
+    </div>
+    <div class="desktop-icon" onclick="openQueens()">
+      <div class="icon-img"><span data-icon="queens"></span></div>
+      <div>Queens</div>
+    </div>
+  </div>
+
+  <div class="windows-area" id="windows-area">
+
+    <!-- About -->
+    <div class="window open active" id="about-window" style="left:0px;top:0px;width:420px;">
+      <div class="title-bar" id="about-title">
+        <div class="title-bar-text">
+          <span class="title-bar-icon"><span data-icon="about"></span></span>
+          About — Alex Satur
+        </div>
+        <div class="title-bar-controls">
+          <button class="title-btn" onclick="minimizeWindow('about')">_</button>
+          <button class="title-btn">□</button>
+          <button class="title-btn" onclick="closeWindow('about')">✕</button>
+        </div>
+      </div>
+      <div class="menu-bar">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Edit</span>
+        <span class="menu-item">View</span>
+        <span class="menu-item">Help</span>
+      </div>
+      <div class="window-body">
+        <div class="about-layout">
+          <div>
+            <div class="photo-placeholder"><img src="/alex.jpg" alt="Alex Satur" style="width:120px;height:140px;object-fit:cover;object-position:center top;display:block;"></div>
+            <div class="photo-caption">alex.jpg</div>
+          </div>
+          <div class="about-text">
+            <div class="section-header">Alex Satur</div>
+            <div class="inset-box">
+              <div class="field-row"><span class="field-label">Name:</span><span>Alex Satur</span></div>
+              <div class="field-row"><span class="field-label">Location:</span><span>London, UK</span></div>
+              <div class="field-row"><span class="field-label">Role:</span><span>Senior Software Developer</span></div>
+            </div>
+            <div class="inset-box">Backend-focused developer with 7+ years across fintech, consultancy and startups. I specialise in serverless and event-driven architecture on AWS — building systems that are efficient, scalable and straightforward to operate.<br><br>The people I work with matter as much to me as the work itself. I thrive where the culture is strong, the team holds each other to a high standard, and there's genuine ownership over what gets built.<br><br>Outside of work: tennis, snowboarding, running.</div>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div class="status-item">Ready</div>
+          <div class="status-item">knittedmice.com</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="window" id="history-window" style="left:30px;top:30px;width:400px;">
+      <div class="title-bar" id="history-title">
+        <div class="title-bar-text">
+          <span class="title-bar-icon"><span data-icon="history"></span></span>
+          History.txt
+        </div>
+        <div class="title-bar-controls">
+          <button class="title-btn" onclick="minimizeWindow('history')">_</button>
+          <button class="title-btn">□</button>
+          <button class="title-btn" onclick="closeWindow('history')">✕</button>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="section-header">Work History</div>
+        <div class="timeline-item">
+          <div class="timeline-year">2025</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Senior Developer</div>
+            <div class="timeline-sub">Openr · Oct 2025 – Present</div>
+            <div>Leading the backend effort — technical direction, team ceremonies, mentoring. Building serverless systems on AWS and owning third-party integrations end-to-end.</div>
+          </div>
+        </div>
+        <hr class="win95"/>
+        <div class="timeline-item">
+          <div class="timeline-year">2021</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Software Developer → Senior Developer</div>
+            <div class="timeline-sub">AND Digital · May 2021 – Sep 2025</div>
+            <div>Promoted to Senior in 2023. Embedded at Openr (Oct 2022–Sep 2025) building their product from the ground up — team lead, CI/CD with ArgoCD, serverless AWS. Before that, built a bespoke event-driven CRM for Robert Walters on AWS, Kafka and GraphQL.</div>
+          </div>
+        </div>
+        <hr class="win95"/>
+        <div class="timeline-item">
+          <div class="timeline-year">2019</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Software Developer</div>
+            <div class="timeline-sub">Ironfly Technologies · Apr 2019 – Oct 2020</div>
+            <div>Fintech platform for order, portfolio and execution management. Built trading features, implemented FIX protocol integration, wrote compliance rules.</div>
+          </div>
+        </div>
+        <hr class="win95"/>
+        <div class="timeline-item">
+          <div class="timeline-year">2017</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Software Developer</div>
+            <div class="timeline-sub">HSSMI · Nov 2017 – Apr 2019</div>
+            <div>Sole developer across IoT, data visualisation and web projects — factory gamification, an Alexa skill for CNC machines, a battery lifecycle calculator.</div>
+          </div>
+        </div>
+        <div class="status-bar"><div class="status-item">4 items</div></div>
+      </div>
+    </div>
+
+    <!-- Interests -->
+    <div class="window" id="interests-window" style="left:60px;top:60px;width:360px;">
+      <div class="title-bar" id="interests-title">
+        <div class="title-bar-text">
+          <span class="title-bar-icon"><span data-icon="interests"></span></span>
+          Interests
+        </div>
+        <div class="title-bar-controls">
+          <button class="title-btn" onclick="minimizeWindow('interests')">_</button>
+          <button class="title-btn">□</button>
+          <button class="title-btn" onclick="closeWindow('interests')">✕</button>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="section-header">Things I enjoy</div>
+        <div class="interest-grid">
+          <div class="interest-item"><span class="interest-icon">🎾</span>Tennis</div>
+          <div class="interest-item"><span class="interest-icon">🏂</span>Snowboarding</div>
+          <div class="interest-item"><span class="interest-icon">🏃</span>Running</div>
+          <div class="interest-item"><span class="interest-icon">📱</span>iOS Dev</div>
+          <div class="interest-item"><span class="interest-icon">🧩</span>Puzzles</div>
+          <div class="interest-item"><span class="interest-icon">☁️</span>Serverless</div>
+        </div>
+        <div class="status-bar"><div class="status-item">6 items</div></div>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="window" id="projects-window" style="left:90px;top:90px;width:420px;">
+      <div class="title-bar" id="projects-title">
+        <div class="title-bar-text">
+          <span class="title-bar-icon"><span data-icon="projects"></span></span>
+          Projects
+        </div>
+        <div class="title-bar-controls">
+          <button class="title-btn" onclick="minimizeWindow('projects')">_</button>
+          <button class="title-btn">□</button>
+          <button class="title-btn" onclick="closeWindow('projects')">✕</button>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="section-header">Things I've built</div>
+        <div class="project-card">
+          <div class="project-icon"><span data-icon="queens"></span></div>
+          <div class="project-info">
+            <div class="project-name">Queens</div>
+            <div class="project-desc">A Star Battle / Queens logic puzzle game for iPhone. Place one queen in every row, column, and region. Built with Swift and a Cloudflare Workers API.</div>
+            <button class="btn" onclick="window.open('https://apps.apple.com/app/id','_blank')">🍎 App Store</button>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><span data-icon="mapthemanor"></span></div>
+          <div class="project-info">
+            <div class="project-name">Map the Manor</div>
+            <div class="project-desc">Interactive map of UK planning applications. Browse approvals, refusals, and pending decisions across local councils. Built with Next.js, MapLibre, and Cloudflare Workers + D1.</div>
+            <button class="btn" onclick="window.location.href='https://mapthemanor.knittedmice.com'">View →</button>
+          </div>
+        </div>
+        <div class="status-bar"><div class="status-item">2 items</div></div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="window" id="contact-window" style="left:120px;top:120px;width:300px;">
+      <div class="title-bar" id="contact-title">
+        <div class="title-bar-text">
+          <span class="title-bar-icon"><span data-icon="contact"></span></span>
+          Contact
+        </div>
+        <div class="title-bar-controls">
+          <button class="title-btn" onclick="minimizeWindow('contact')">_</button>
+          <button class="title-btn">□</button>
+          <button class="title-btn" onclick="closeWindow('contact')">✕</button>
+        </div>
+      </div>
+      <div class="window-body">
+        <div class="section-header">Get in touch</div>
+        <div class="inset-box">
+          <div class="field-row">
+            <span class="field-label">Email:</span>
+            <a href="mailto:hello@knittedmice.com" style="color:var(--navy)">hello@knittedmice.com</a>
+          </div>
+          <div class="field-row">
+            <span class="field-label">GitHub:</span>
+            <a href="https://github.com/altech0" target="_blank" style="color:var(--navy)">altech0</a>
+          </div>
+          <div class="field-row">
+            <span class="field-label">LinkedIn:</span>
+            <a href="https://linkedin.com/in/alex-saturday" target="_blank" style="color:var(--navy)">alex-saturday</a>
+          </div>
+        </div>
+        <div class="status-bar"><div class="status-item">Ready</div></div>
+      </div>
+    </div>
+
+    <!-- Queens -->
+    <div class="window" id="queens-window" style="left:60px;top:40px;width:420px;">
+      <div class="title-bar" id="queens-title">
+        <div class="title-bar-text">
+          <span class="title-bar-icon"><span data-icon="queens"></span></span>
+          Queens
+        </div>
+        <div class="title-bar-controls">
+          <button class="title-btn" onclick="minimizeWindow('queens')">_</button>
+          <button class="title-btn">□</button>
+          <button class="title-btn" onclick="closeWindow('queens')">✕</button>
+        </div>
+      </div>
+      <div class="queens-toolbar">
+        <label style="font-size:11px;">Size:</label>
+        <select id="q-size" onchange="qSizeChanged()">
+          <option value="">Any</option>
+          <option value="6">6×6</option>
+          <option value="8">8×8</option>
+          <option value="10">10×10</option>
+        </select>
+        <label style="font-size:11px;">Stars:</label>
+        <select id="q-stars">
+          <option value="">Any</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+        <button class="btn" onclick="queensNewGame()" style="margin-left:4px;">New Game</button>
+      </div>
+      <div class="queens-body" id="queens-body">
+        <div style="padding:20px;color:var(--dark-gray);font-size:11px;">Click New Game to start</div>
+      </div>
+      <div class="status-bar">
+        <div class="status-item" id="queens-status">Ready</div>
+        <div class="status-item" style="margin-left:auto;">Click: mark X &nbsp;·&nbsp; Click again: place queen &nbsp;·&nbsp; Click again: clear</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="taskbar">
+  <button class="start-btn">
+    <span class="start-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="0" y="0" width="7" height="7" fill="#ff0000"/><rect x="8" y="0" width="7" height="7" fill="#00cc00"/><rect x="0" y="8" width="7" height="7" fill="#0000ff"/><rect x="8" y="8" width="7" height="7" fill="#ffcc00"/></span>
+    Start
+  </button>
+  <div class="taskbar-divider"></div>
+  <button class="taskbar-btn active" id="tb-about" onclick="toggleWindow('about')"><span data-icon="about"></span> About</button>
+  <button class="taskbar-btn" id="tb-history" onclick="toggleWindow('history')"><span data-icon="history"></span> History</button>
+  <button class="taskbar-btn" id="tb-interests" onclick="toggleWindow('interests')"><span data-icon="interests"></span> Interests</button>
+  <button class="taskbar-btn" id="tb-projects" onclick="toggleWindow('projects')"><span data-icon="projects"></span> Projects</button>
+  <button class="taskbar-btn" id="tb-contact" onclick="toggleWindow('contact')"><span data-icon="contact"></span> Contact</button>
+  <button class="taskbar-btn" id="tb-queens" onclick="toggleWindow('queens')"><span data-icon="queens"></span> Queens</button>
+  <div class="taskbar-clock" id="clock"></div>
+</div>
+
+<script>
+// ── Win95 Icons ──────────────────────────────────────────────────────────────
+const ICONS = {
+  about:     `<img src="/icons/w98_user_card.ico" alt="about">`,
+  history:   `<img src="/icons/w2k_my_documents.ico" alt="history">`,
+  interests: `<img src="/icons/w2k_cd_player.ico" alt="interests">`,
+  projects:  `<img src="/icons/w2k_folder_open.ico" alt="projects">`,
+  contact:   `<img src="/icons/w98_world_phonereceiver.ico" alt="contact">`,
+  person:    `<img src="/icons/w98_users.ico" alt="person">`,
+
+  mapthemanor: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+    <rect x="2" y="2" width="28" height="28" fill="#1a2e1a"/>
+    <rect x="2" y="2" width="28" height="1" fill="#fff" opacity="0.3"/>
+    <rect x="2" y="2" width="1" height="28" fill="#fff" opacity="0.3"/>
+    <rect x="29" y="2" width="1" height="28" fill="#000" opacity="0.3"/>
+    <rect x="2" y="29" width="28" height="1" fill="#000" opacity="0.3"/>
+    <circle cx="16" cy="16" r="8" fill="none" stroke="#c9a84c" stroke-width="1"/>
+    <circle cx="16" cy="16" r="3" fill="#c9a84c"/>
+    <line x1="16" y1="8" x2="16" y2="10" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="16" y1="22" x2="16" y2="24" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="8" y1="16" x2="10" y2="16" stroke="#c9a84c" stroke-width="1"/>
+    <line x1="22" y1="16" x2="24" y2="16" stroke="#c9a84c" stroke-width="1"/>
+  </svg>`,
+
+  queens: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+    <rect x="2"  y="2"  width="28" height="28" fill="#c0c0c0"/>
+    <rect x="2"  y="2"  width="28" height="1"  fill="#fff"/>
+    <rect x="2"  y="2"  width="1"  height="28" fill="#fff"/>
+    <rect x="29" y="2"  width="1"  height="28" fill="#404040"/>
+    <rect x="2"  y="29" width="28" height="1"  fill="#404040"/>
+    <rect x="4"  y="4"  width="6"  height="6"  fill="#ffe060"/>
+    <rect x="13" y="4"  width="6"  height="6"  fill="#c0c0c0"/>
+    <rect x="22" y="4"  width="6"  height="6"  fill="#ffe060"/>
+    <rect x="4"  y="13" width="6"  height="6"  fill="#c0c0c0"/>
+    <rect x="13" y="13" width="6"  height="6"  fill="#ffe060"/>
+    <rect x="22" y="13" width="6"  height="6"  fill="#c0c0c0"/>
+    <rect x="4"  y="22" width="6"  height="6"  fill="#ffe060"/>
+    <rect x="13" y="22" width="6"  height="6"  fill="#c0c0c0"/>
+    <rect x="22" y="22" width="6"  height="6"  fill="#ffe060"/>
+    <polygon points="16,6 17,10 21,10 18,13 19,17 16,14 13,17 14,13 11,10 15,10" fill="#c8a000" stroke="#805000" stroke-width="0.5"/>
+  </svg>`,
+};
+
+// Inject icons
+document.querySelectorAll('[data-icon]').forEach(el => {
+  const key = el.dataset.icon;
+  if (ICONS[key]) el.innerHTML = ICONS[key];
+});
+
+// ── Window management ────────────────────────────────────────────────────────
+const windows = ['about', 'history', 'interests', 'projects', 'contact', 'queens'];
+let zCounter = 100;
+
+function getEl(id) { return document.getElementById(id + '-window'); }
+function getTb(id) { return document.getElementById('tb-' + id); }
+
+function bringToFront(id) {
+  windows.forEach(w => {
+    getEl(w).classList.remove('active');
+    document.getElementById(w + '-title')?.classList.add('inactive');
+    getTb(w)?.classList.remove('active');
+  });
+  const el = getEl(id);
+  el.classList.add('active');
+  el.style.zIndex = ++zCounter;
+  document.getElementById(id + '-title')?.classList.remove('inactive');
+  getTb(id)?.classList.add('active');
+}
+
+function toggleWindow(id) {
+  const el = getEl(id);
+  if (el.classList.contains('open')) {
+    if (el.classList.contains('active')) closeWindow(id);
+    else bringToFront(id);
+  } else {
+    el.classList.add('open');
+    bringToFront(id);
+  }
+}
+
+function closeWindow(id) {
+  getEl(id).classList.remove('open', 'active');
+  getTb(id)?.classList.remove('active');
+}
+
+function minimizeWindow(id) { closeWindow(id); }
+
+windows.forEach(id => {
+  getEl(id).addEventListener('mousedown', () => bringToFront(id));
+  const win = getEl(id);
+  const bar = document.getElementById(id + '-title');
+  if (!bar) return;
+  let dragging = false, startX, startY, startL, startT;
+  bar.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('title-btn')) return;
+    dragging = true;
+    startX = e.clientX; startY = e.clientY;
+    startL = win.offsetLeft; startT = win.offsetTop;
+    bringToFront(id);
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    win.style.left = Math.max(0, startL + e.clientX - startX) + 'px';
+    win.style.top  = Math.max(0, startT + e.clientY - startY) + 'px';
+  });
+  document.addEventListener('mouseup', () => dragging = false);
+});
+
+// ── Queens game ─────────────────────────────────────────────────────────────
+const API = 'https://api.queens.knittedmice.com';
+const REGION_COLORS = [
+  '#f4a4a4','#a4c8f4','#a4f4a4','#f4d4a4','#d4a4f4',
+  '#f4f4a4','#a4f4d4','#f4a4d4','#a4d4f4','#d4f4a4',
+];
+
+let qPuzzle = null;
+let qBoard  = null; // 0=empty 1=queen 2=X
+
+async function getQToken() {
+  let t = localStorage.getItem('queens_token');
+  if (t) return t;
+  const nick = 'guest_' + Math.random().toString(36).slice(2, 10);
+  const res = await fetch(`${API}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nickname: nick }),
+  });
+  const data = await res.json();
+  t = data.api_token;
+  localStorage.setItem('queens_token', t);
+  return t;
+}
+
+function openQueens() {
+  const el = getEl('queens');
+  if (!el.classList.contains('open')) {
+    el.classList.add('open');
+    bringToFront('queens');
+  } else {
+    bringToFront('queens');
+  }
+}
+
+async function queensNewGame() {
+  const size  = document.getElementById('q-size').value;
+  const stars = document.getElementById('q-stars').value;
+  setQStatus('Loading…');
+  document.getElementById('queens-body').innerHTML =
+    '<div style="padding:20px;color:var(--dark-gray);font-size:11px;">Loading…</div>';
+
+  let token;
+  try { token = await getQToken(); }
+  catch { setQStatus('Could not connect to API'); return; }
+
+  let url = `${API}/puzzle`;
+  const params = [];
+  if (size)  params.push(`size=${size}`);
+  if (stars) params.push(`stars=${stars}`);
+  if (params.length) url += '?' + params.join('&');
+
+  const res = await fetch(url, { headers: { 'X-API-Token': token } });
+  if (!res.ok) { setQStatus('Failed to load puzzle'); return; }
+
+  qPuzzle = await res.json();
+  qBoard  = Array.from({ length: qPuzzle.gridSize }, () => new Array(qPuzzle.gridSize).fill(0));
+
+  renderQueensGrid();
+  setQStatus(`${qPuzzle.gridSize}×${qPuzzle.gridSize}  ·  ${qPuzzle.stars} star${qPuzzle.stars > 1 ? 's' : ''} per row / col / region`);
+
+  // resize window to fit grid
+  const cellSize = qCellSize();
+  const gridPx = cellSize * qPuzzle.gridSize + 2;
+  document.getElementById('queens-window').style.width = Math.max(300, gridPx + 24) + 'px';
+}
+
+function qCellSize() {
+  return Math.min(50, Math.max(28, Math.floor(400 / (qPuzzle?.gridSize ?? 8))));
+}
+
+function renderQueensGrid() {
+  const { gridSize, regions } = qPuzzle;
+  const cell = qCellSize();
+  const conflicts = getQConflicts();
+
+  let html = `<table class="queens-grid" style="border-collapse:collapse;table-layout:fixed;">`;
+  for (let r = 0; r < gridSize; r++) {
+    html += '<tr>';
+    for (let c = 0; c < gridSize; c++) {
+      const rid   = regions[r][c];
+      const color = REGION_COLORS[rid % REGION_COLORS.length];
+      const state = qBoard[r][c];
+      const isConflict = conflicts.has(`${r},${c}`);
+      const cls   = state === 1 ? 'q-queen' : state === 2 ? 'q-x' : '';
+      const confCls = isConflict && state === 1 ? ' q-conflict' : '';
+      const xSize = Math.round(cell * 0.36);
+      const xMark = `<svg xmlns="http://www.w3.org/2000/svg" width="${xSize}" height="${xSize}" viewBox="0 0 10 10" shape-rendering="crispEdges"><line x1="1" y1="1" x2="9" y2="9" stroke="#707070" stroke-width="1.5"/><line x1="9" y1="1" x2="1" y2="9" stroke="#707070" stroke-width="1.5"/></svg>`;
+      const label = state === 1 ? '♛' : state === 2 ? xMark : '';
+      const fontSize = Math.round(cell * 0.62);
+      const borders = qBorders(r, c, regions, gridSize);
+      html += `<td class="${cls}${confCls}"
+        style="width:${cell}px;height:${cell}px;background:${color};${borders}font-size:${fontSize}px;"
+        onclick="qClick(${r},${c})"
+      >${label}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+
+  document.getElementById('queens-body').innerHTML = html;
+}
+
+function qBorders(r, c, regions, size) {
+  const rid = regions[r][c];
+  const heavy = '2px solid #444';
+  const light = '1px solid rgba(0,0,0,0.12)';
+  const top    = (r === 0 || regions[r-1][c] !== rid) ? heavy : light;
+  const left   = (c === 0 || regions[r][c-1] !== rid) ? heavy : light;
+  const bottom = (r === size-1 || regions[r+1][c] !== rid) ? heavy : light;
+  const right  = (c === size-1 || regions[r][c+1] !== rid) ? heavy : light;
+  return `border-top:${top};border-left:${left};border-bottom:${bottom};border-right:${right};`;
+}
+
+function qClick(r, c) {
+  if (!qBoard) return;
+  // empty(0) → X(2) → queen(1) → empty(0)
+  qBoard[r][c] = qBoard[r][c] === 0 ? 2 : qBoard[r][c] === 2 ? 1 : 0;
+  renderQueensGrid();
+  checkQueensWin();
+}
+
+function getQConflicts() {
+  if (!qPuzzle || !qBoard) return new Set();
+  const { gridSize, regions, stars } = qPuzzle;
+  const k = stars;
+  const rowQ = new Array(gridSize).fill(0);
+  const colQ = new Array(gridSize).fill(0);
+  const regQ = new Array(gridSize).fill(0);
+  const queens = [];
+
+  for (let r = 0; r < gridSize; r++) {
+    for (let c = 0; c < gridSize; c++) {
+      if (qBoard[r][c] === 1) {
+        rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++;
+        queens.push([r, c]);
+      }
+    }
+  }
+
+  const bad = new Set();
+  for (const [r, c] of queens) {
+    if (rowQ[r] > k || colQ[c] > k || regQ[regions[r][c]] > k) bad.add(`${r},${c}`);
+  }
+  for (let i = 0; i < queens.length; i++) {
+    for (let j = i + 1; j < queens.length; j++) {
+      const [r1,c1] = queens[i], [r2,c2] = queens[j];
+      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) {
+        bad.add(`${r1},${c1}`); bad.add(`${r2},${c2}`);
+      }
+    }
+  }
+  return bad;
+}
+
+function checkQueensWin() {
+  if (!qPuzzle || !qBoard) return;
+  const { gridSize, regions, stars } = qPuzzle;
+  const k = stars;
+  const rowQ = new Array(gridSize).fill(0);
+  const colQ = new Array(gridSize).fill(0);
+  const regQ = new Array(gridSize).fill(0);
+  const queens = [];
+
+  for (let r = 0; r < gridSize; r++) {
+    for (let c = 0; c < gridSize; c++) {
+      if (qBoard[r][c] === 1) {
+        rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++;
+        queens.push([r, c]);
+      }
+    }
+  }
+
+  if (rowQ.some(n => n !== k) || colQ.some(n => n !== k) || regQ.some(n => n !== k)) return;
+
+  for (let i = 0; i < queens.length; i++) {
+    for (let j = i + 1; j < queens.length; j++) {
+      const [r1,c1] = queens[i], [r2,c2] = queens[j];
+      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) return;
+    }
+  }
+
+  // Win!
+  setQStatus('✓ Solved!');
+  const body = document.getElementById('queens-body');
+  const overlay = document.createElement('div');
+  overlay.className = 'queens-win-overlay';
+  overlay.innerHTML = `
+    <div class="queens-win-dialog">
+      <div class="title-bar">
+        <div class="title-bar-text"><span class="title-bar-icon"><span data-icon="queens"></span></span> Queens</div>
+      </div>
+      <div class="queens-win-dialog-body">
+        <p>You solved it!</p>
+        <button class="btn" onclick="queensNewGame();this.closest('.queens-win-overlay').remove()">New Game</button>
+        &nbsp;
+        <button class="btn" onclick="this.closest('.queens-win-overlay').remove()">OK</button>
+      </div>
+    </div>`;
+  // inject icon into the dialog after insertion
+  body.style.position = 'relative';
+  body.appendChild(overlay);
+  overlay.querySelectorAll('[data-icon]').forEach(el => {
+    const key = el.dataset.icon;
+    if (ICONS[key]) el.innerHTML = ICONS[key];
+  });
+}
+
+function qSizeChanged() {
+  const size = document.getElementById('q-size').value;
+  const starsEl = document.getElementById('q-stars');
+  const cur = starsEl.value;
+  // 6→1 only, 8→1 or 2, 10→2 only, any→any
+  const allowed = size === '6' ? ['', '1'] : size === '10' ? ['', '2'] : ['', '1', '2'];
+  starsEl.innerHTML = [
+    ['', 'Any'], ['1', '1'], ['2', '2']
+  ].filter(([v]) => allowed.includes(v))
+   .map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+  if (!allowed.includes(cur)) starsEl.value = '';
+}
+
+function setQStatus(msg) {
+  document.getElementById('queens-status').textContent = msg;
+}
+
+// Clock
+function updateClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
