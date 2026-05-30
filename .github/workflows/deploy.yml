@@ -14,16 +14,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name knittedmice
-
-      - name: Redeploy queens-web
-        run: |
-          curl -X POST \
-            "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/queens-web/deployments" \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}"
-
-      - name: Redeploy mapthemanor
-        run: |
-          curl -X POST \
-            "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/mapthemanor/deployments" \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}"
+          command: pages deploy . --project-name knittedmice --delete-old-assets
