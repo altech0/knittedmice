@@ -401,24 +401,360 @@
     .queens-win-dialog-body { padding: 16px 20px 12px; }
     .queens-win-dialog-body p { margin-bottom: 12px; }
 
-    /* ── Mobile ── */
-    @media (max-width: 600px) {
-      .windows-area { min-height: unset; }
-      .window {
-        position: static !important;
-        width: 100% !important;
-        display: block !important;
-        margin-bottom: 8px;
+    /* ══════════════════════════════════════════════════════
+       PALM OS 5 — mobile only (hidden on desktop)
+    ══════════════════════════════════════════════════════ */
+    .palm-ui { display: none; }
+
+    @media (max-width: 768px) {
+
+      /* Hide the entire Win95 UI */
+      .desktop { display: none; }
+      .taskbar { display: none; }
+
+      /* Show Palm UI */
+      .palm-ui { display: flex; }
+
+      body {
+        background: #c8c4be;
+        font-family: 'Trebuchet MS', 'Verdana', Geneva, sans-serif;
+        padding-bottom: 0;
       }
-      .desktop { flex-direction: column; padding: 6px; }
-      .desktop-icons { flex-direction: row; flex-wrap: wrap; }
-      .interest-grid { grid-template-columns: repeat(2, 1fr); }
-      .about-layout { flex-direction: column; }
+
+      /* ── Palm shell ── */
+      .palm-ui {
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* Status bar */
+      .p5-statusbar {
+        background: linear-gradient(to bottom, #3a5280, #2a3f6a);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 3px 10px;
+        font-size: 10px;
+        color: #c8d8f4;
+        font-family: 'Verdana', sans-serif;
+        flex-shrink: 0;
+      }
+      .p5-statusbar-right { display: flex; gap: 6px; align-items: center; }
+      .p5-signal { display: flex; gap: 1px; align-items: flex-end; }
+      .p5-signal span { display: inline-block; width: 2px; background: #c8d8f4; border-radius: 1px; }
+      .p5-battery { display: flex; align-items: center; gap: 1px; }
+      .p5-battery-bar { width: 14px; height: 7px; border: 1px solid #c8d8f4; border-radius: 1px; padding: 1px; }
+      .p5-battery-fill { height: 100%; width: 70%; background: #c8d8f4; border-radius: 1px; }
+      .p5-battery-tip { width: 2px; height: 4px; background: #c8d8f4; border-radius: 0 1px 1px 0; }
+
+      /* Title bar */
+      .p5-titlebar {
+        background: linear-gradient(to bottom, #4a6aa0, #2e4f88);
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 7px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #1a2f58;
+        flex-shrink: 0;
+      }
+      .p5-titlebar-sub {
+        font-size: 11px;
+        font-weight: normal;
+        opacity: 0.75;
+      }
+
+      /* Screen area — scrollable */
+      .p5-screen {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #f0ede8;
+      }
+
+      /* ── Home: app launcher grid ── */
+      .p5-home { padding: 20px 16px 12px; }
+
+      .p5-app-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px 8px;
+        margin-bottom: 24px;
+      }
+
+      .p5-app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .p5-app-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.25);
+        transition: transform 0.08s;
+      }
+      .p5-app:active .p5-app-icon { transform: scale(0.92); }
+
+      .p5-app-label {
+        font-size: 10px;
+        color: #222;
+        text-align: center;
+        font-family: 'Verdana', sans-serif;
+        line-height: 1.2;
+      }
+
+      .p5-section-label {
+        font-size: 10px;
+        font-weight: bold;
+        color: #5a7090;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 12px;
+        font-family: 'Verdana', sans-serif;
+      }
+
+      /* ── Detail panels ── */
+      .p5-panel { display: none; }
+      .p5-panel.active { display: block; }
+
+      .p5-back-bar {
+        background: linear-gradient(to bottom, #d8d4ce, #c0bcb6);
+        border-bottom: 1px solid #a0a098;
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+      }
+      .p5-back-arrow {
+        font-size: 14px;
+        color: #2e4f88;
+        font-weight: bold;
+      }
+      .p5-back-label {
+        font-size: 12px;
+        color: #2e4f88;
+        font-weight: bold;
+        font-family: 'Verdana', sans-serif;
+      }
+
+      .p5-section-hdr {
+        background: linear-gradient(to bottom, #c8c4be, #b8b4ae);
+        padding: 3px 12px;
+        font-size: 10px;
+        font-weight: bold;
+        color: #444;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        border-bottom: 1px solid #a8a4a0;
+        border-top: 1px solid #d8d4ce;
+        font-family: 'Verdana', sans-serif;
+      }
+
+      .p5-field-group {
+        background: white;
+        border-bottom: 1px solid #d0ccc6;
+        margin-bottom: 16px;
+      }
+      .p5-field {
+        display: flex;
+        gap: 8px;
+        padding: 10px 12px;
+        border-bottom: 1px solid #ece8e4;
+        font-size: 13px;
+      }
+      .p5-field:last-child { border-bottom: none; }
+      .p5-field-label { color: #5070a0; font-weight: bold; min-width: 72px; font-size: 11px; padding-top: 1px; }
+      .p5-field-val { color: #111; flex: 1; line-height: 1.4; }
+      .p5-field-val a { color: #2e4f88; text-decoration: none; }
+
+      .p5-note {
+        background: white;
+        border-top: 1px solid #d0ccc6;
+        border-bottom: 1px solid #d0ccc6;
+        padding: 12px;
+        font-size: 13px;
+        line-height: 1.7;
+        color: #333;
+        margin-bottom: 16px;
+      }
+
+      .p5-photo {
+        display: block;
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      /* timeline in history panel */
+      .p5-timeline-item {
+        background: white;
+        border-bottom: 1px solid #ece8e4;
+        padding: 10px 12px;
+        display: flex;
+        gap: 10px;
+      }
+      .p5-timeline-year {
+        font-size: 11px;
+        font-weight: bold;
+        color: #2e4f88;
+        min-width: 32px;
+        padding-top: 2px;
+        font-family: 'Verdana', sans-serif;
+      }
+      .p5-timeline-body { flex: 1; }
+      .p5-timeline-title { font-size: 13px; font-weight: bold; color: #111; margin-bottom: 2px; }
+      .p5-timeline-sub { font-size: 11px; color: #888; margin-bottom: 4px; }
+      .p5-timeline-desc { font-size: 12px; color: #444; line-height: 1.5; }
+
+      /* interests grid */
+      .p5-interest-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: #d0ccc6;
+        border-top: 1px solid #d0ccc6;
+        border-bottom: 1px solid #d0ccc6;
+        margin-bottom: 16px;
+      }
+      .p5-interest-item {
+        background: white;
+        padding: 16px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: #333;
+        text-align: center;
+        font-family: 'Verdana', sans-serif;
+      }
+      .p5-interest-icon { font-size: 26px; }
+
+      /* project cards */
+      .p5-project-card {
+        background: white;
+        border-bottom: 1px solid #d0ccc6;
+        padding: 12px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .p5-project-icon-wrap {
+        width: 44px; height: 44px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      }
+      .p5-project-info { flex: 1; }
+      .p5-project-name { font-size: 14px; font-weight: bold; color: #111; margin-bottom: 3px; }
+      .p5-project-desc { font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 8px; }
+      .p5-pill-btn {
+        display: inline-block;
+        background: linear-gradient(to bottom, #5a7ab8, #3a5a98);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 5px 14px;
+        font-size: 12px;
+        font-family: 'Verdana', sans-serif;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 3px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+        -webkit-tap-highlight-color: transparent;
+        text-decoration: none;
+      }
+
+      /* Queens game in palm */
+      .p5-queens-toolbar {
+        background: linear-gradient(to bottom, #d8d4ce, #c8c4be);
+        border-bottom: 1px solid #a0a098;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+      }
+      .p5-queens-toolbar label { font-size: 12px; color: #444; }
+      .p5-queens-toolbar select {
+        font-family: 'Verdana', sans-serif;
+        font-size: 12px;
+        background: white;
+        border: 1px solid #a0a098;
+        border-radius: 3px;
+        padding: 2px 4px;
+        height: 26px;
+      }
+      .p5-queens-body {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 12px;
+        overflow: auto;
+        background: #f0ede8;
+      }
+      .p5-queens-status {
+        background: linear-gradient(to bottom, #d8d4ce, #c8c4be);
+        border-top: 1px solid #a0a098;
+        padding: 4px 12px;
+        font-size: 11px;
+        color: #555;
+        font-family: 'Verdana', sans-serif;
+        flex-shrink: 0;
+      }
+
+      /* Palm toolbar at bottom */
+      .p5-toolbar {
+        background: linear-gradient(to bottom, #d0ccc6, #b8b4ae);
+        border-top: 1px solid #a0a098;
+        display: flex;
+        justify-content: space-around;
+        padding: 6px 0 8px;
+        flex-shrink: 0;
+        position: sticky;
+        bottom: 0;
+      }
+      .p5-tool-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 2px 12px;
+        font-size: 10px;
+        color: #555;
+        cursor: pointer;
+        border-radius: 4px;
+        -webkit-tap-highlight-color: transparent;
+        font-family: 'Verdana', sans-serif;
+      }
+      .p5-tool-btn.active { color: #2e4f88; }
+      .p5-tool-icon { font-size: 20px; }
     }
   </style>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════
+     WIN95 UI (desktop)
+═══════════════════════════════════════════ -->
 <div class="desktop">
   <div class="desktop-icons">
     <div class="desktop-icon" onclick="toggleWindow('about')">
@@ -702,6 +1038,270 @@
   <div class="taskbar-clock" id="clock"></div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════
+     PALM OS 5 UI (mobile)
+═══════════════════════════════════════════ -->
+<div class="palm-ui" id="palm-ui">
+
+  <div class="p5-statusbar">
+    <span>knittedmice.com</span>
+    <div class="p5-statusbar-right">
+      <div class="p5-signal">
+        <span style="height:3px"></span>
+        <span style="height:5px"></span>
+        <span style="height:7px"></span>
+        <span style="height:9px"></span>
+      </div>
+      <div class="p5-battery">
+        <div class="p5-battery-bar"><div class="p5-battery-fill"></div></div>
+        <div class="p5-battery-tip"></div>
+      </div>
+      <span id="palm-clock">14:32</span>
+    </div>
+  </div>
+
+  <!-- Home screen -->
+  <div id="palm-home" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>Alex Satur</span>
+      <span class="p5-titlebar-sub">Home</span>
+    </div>
+    <div class="p5-screen">
+      <div class="p5-home">
+        <div class="p5-section-label">Applications</div>
+        <div class="p5-app-grid">
+
+          <div class="p5-app" onclick="palmOpen('about')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#4a6aa0,#2e4070);">👤</div>
+            <div class="p5-app-label">About</div>
+          </div>
+
+          <div class="p5-app" onclick="palmOpen('history')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#7a5820,#4a3610);">📋</div>
+            <div class="p5-app-label">History</div>
+          </div>
+
+          <div class="p5-app" onclick="palmOpen('interests')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#a06020,#6a3e10);">🎾</div>
+            <div class="p5-app-label">Interests</div>
+          </div>
+
+          <div class="p5-app" onclick="palmOpen('projects')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#207040,#104828);">🛠</div>
+            <div class="p5-app-label">Projects</div>
+          </div>
+
+          <div class="p5-app" onclick="palmOpen('contact')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#702080,#401050);">✉️</div>
+            <div class="p5-app-label">Contact</div>
+          </div>
+
+          <div class="p5-app" onclick="palmOpen('queens')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#c09020,#806010);">★</div>
+            <div class="p5-app-label">Queens</div>
+          </div>
+
+          <div class="p5-app" onclick="window.open('https://dashboard.queens.knittedmice.com','_blank')">
+            <div class="p5-app-icon" style="background:linear-gradient(135deg,#204080,#102050);">📊</div>
+            <div class="p5-app-label">Dashboard</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="p5-toolbar">
+      <div class="p5-tool-btn active">
+        <span class="p5-tool-icon">⊞</span>
+        <span>Home</span>
+      </div>
+      <div class="p5-tool-btn" onclick="palmOpen('queens')">
+        <span class="p5-tool-icon">★</span>
+        <span>Queens</span>
+      </div>
+      <div class="p5-tool-btn" onclick="palmOpen('contact')">
+        <span class="p5-tool-icon">✉️</span>
+        <span>Contact</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- About panel -->
+  <div id="palm-about" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>About</span>
+      <span class="p5-titlebar-sub">Alex Satur</span>
+    </div>
+    <div class="p5-back-bar" onclick="palmHome()">
+      <span class="p5-back-arrow">◀</span>
+      <span class="p5-back-label">Home</span>
+    </div>
+    <div class="p5-screen">
+      <img src="/alex.jpg" alt="Alex Satur" class="p5-photo">
+      <div class="p5-field-group">
+        <div class="p5-field"><span class="p5-field-label">Name</span><span class="p5-field-val" style="font-weight:bold;">Alex Satur</span></div>
+        <div class="p5-field"><span class="p5-field-label">Role</span><span class="p5-field-val">Senior Software Developer</span></div>
+        <div class="p5-field"><span class="p5-field-label">Location</span><span class="p5-field-val">London, UK</span></div>
+      </div>
+      <div class="p5-note">
+        Backend-focused developer with 7+ years across fintech, consultancy and startups. I specialise in serverless and event-driven architecture on AWS — building systems that are efficient, scalable and straightforward to operate.<br><br>
+        The people I work with matter as much to me as the work itself. I thrive where the culture is strong, the team holds each other to a high standard, and there's genuine ownership over what gets built.<br><br>
+        Outside of work: tennis, snowboarding, running.
+      </div>
+    </div>
+  </div>
+
+  <!-- History panel -->
+  <div id="palm-history" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>History</span>
+      <span class="p5-titlebar-sub">Work</span>
+    </div>
+    <div class="p5-back-bar" onclick="palmHome()">
+      <span class="p5-back-arrow">◀</span>
+      <span class="p5-back-label">Home</span>
+    </div>
+    <div class="p5-screen">
+      <div class="p5-section-hdr">Work History</div>
+      <div class="p5-timeline-item">
+        <div class="p5-timeline-year">2025</div>
+        <div class="p5-timeline-body">
+          <div class="p5-timeline-title">Senior Developer</div>
+          <div class="p5-timeline-sub">Openr · Oct 2025 – Present</div>
+          <div class="p5-timeline-desc">Leading the backend effort — technical direction, team ceremonies, mentoring. Building serverless systems on AWS and owning third-party integrations end-to-end.</div>
+        </div>
+      </div>
+      <div class="p5-timeline-item">
+        <div class="p5-timeline-year">2021</div>
+        <div class="p5-timeline-body">
+          <div class="p5-timeline-title">Software Developer → Senior Developer</div>
+          <div class="p5-timeline-sub">AND Digital · May 2021 – Sep 2025</div>
+          <div class="p5-timeline-desc">Promoted to Senior in 2023. Embedded at Openr building their product from the ground up — team lead, CI/CD with ArgoCD, serverless AWS. Before that, built a bespoke event-driven CRM for Robert Walters on AWS, Kafka and GraphQL.</div>
+        </div>
+      </div>
+      <div class="p5-timeline-item">
+        <div class="p5-timeline-year">2019</div>
+        <div class="p5-timeline-body">
+          <div class="p5-timeline-title">Software Developer</div>
+          <div class="p5-timeline-sub">Ironfly Technologies · Apr 2019 – Oct 2020</div>
+          <div class="p5-timeline-desc">Fintech platform for order, portfolio and execution management. Built trading features, implemented FIX protocol integration, wrote compliance rules.</div>
+        </div>
+      </div>
+      <div class="p5-timeline-item">
+        <div class="p5-timeline-year">2017</div>
+        <div class="p5-timeline-body">
+          <div class="p5-timeline-title">Software Developer</div>
+          <div class="p5-timeline-sub">HSSMI · Nov 2017 – Apr 2019</div>
+          <div class="p5-timeline-desc">Sole developer across IoT, data visualisation and web projects — factory gamification, an Alexa skill for CNC machines, a battery lifecycle calculator.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interests panel -->
+  <div id="palm-interests" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>Interests</span>
+    </div>
+    <div class="p5-back-bar" onclick="palmHome()">
+      <span class="p5-back-arrow">◀</span>
+      <span class="p5-back-label">Home</span>
+    </div>
+    <div class="p5-screen">
+      <div class="p5-section-hdr">Things I enjoy</div>
+      <div class="p5-interest-grid">
+        <div class="p5-interest-item"><span class="p5-interest-icon">🎾</span>Tennis</div>
+        <div class="p5-interest-item"><span class="p5-interest-icon">🏂</span>Snowboarding</div>
+        <div class="p5-interest-item"><span class="p5-interest-icon">🏃</span>Running</div>
+        <div class="p5-interest-item"><span class="p5-interest-icon">📱</span>iOS Dev</div>
+        <div class="p5-interest-item"><span class="p5-interest-icon">🧩</span>Puzzles</div>
+        <div class="p5-interest-item"><span class="p5-interest-icon">☁️</span>Serverless</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projects panel -->
+  <div id="palm-projects" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>Projects</span>
+    </div>
+    <div class="p5-back-bar" onclick="palmHome()">
+      <span class="p5-back-arrow">◀</span>
+      <span class="p5-back-label">Home</span>
+    </div>
+    <div class="p5-screen">
+      <div class="p5-section-hdr">Things I've built</div>
+      <div class="p5-project-card">
+        <div class="p5-project-icon-wrap" style="background:linear-gradient(135deg,#c09020,#806010);">★</div>
+        <div class="p5-project-info">
+          <div class="p5-project-name">Queens</div>
+          <div class="p5-project-desc">A Star Battle logic puzzle for iPhone. Place one queen in every row, column, and region. Swift + Cloudflare Workers API.</div>
+          <a class="p5-pill-btn" href="https://queens.knittedmice.com" target="_blank">▶ Play</a>
+        </div>
+      </div>
+      <div class="p5-project-card">
+        <div class="p5-project-icon-wrap" style="background:linear-gradient(135deg,#2a5a2a,#1a3a1a);">🗺</div>
+        <div class="p5-project-info">
+          <div class="p5-project-name">Map the Manor</div>
+          <div class="p5-project-desc">Interactive map of UK planning applications. Next.js, MapLibre, Cloudflare Workers + D1.</div>
+          <a class="p5-pill-btn" href="https://mapthemanor.knittedmice.com" target="_blank">View →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact panel -->
+  <div id="palm-contact" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>Contact</span>
+    </div>
+    <div class="p5-back-bar" onclick="palmHome()">
+      <span class="p5-back-arrow">◀</span>
+      <span class="p5-back-label">Home</span>
+    </div>
+    <div class="p5-screen">
+      <div class="p5-field-group" style="margin-top:16px;">
+        <div class="p5-field"><span class="p5-field-label">Email</span><span class="p5-field-val"><a href="mailto:hello@knittedmice.com">hello@knittedmice.com</a></span></div>
+        <div class="p5-field"><span class="p5-field-label">GitHub</span><span class="p5-field-val"><a href="https://github.com/altech0" target="_blank">altech0</a></span></div>
+        <div class="p5-field"><span class="p5-field-label">LinkedIn</span><span class="p5-field-val"><a href="https://linkedin.com/in/alex-saturday" target="_blank">alex-saturday</a></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Queens panel -->
+  <div id="palm-queens" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="p5-titlebar">
+      <span>Queens</span>
+    </div>
+    <div class="p5-back-bar" onclick="palmHome()">
+      <span class="p5-back-arrow">◀</span>
+      <span class="p5-back-label">Home</span>
+    </div>
+    <div class="p5-queens-toolbar">
+      <label>Size:</label>
+      <select id="pq-size" onchange="pqSizeChanged()">
+        <option value="">Any</option>
+        <option value="6">6×6</option>
+        <option value="8">8×8</option>
+        <option value="10">10×10</option>
+      </select>
+      <label>Stars:</label>
+      <select id="pq-stars">
+        <option value="">Any</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+      <button class="p5-pill-btn" onclick="palmQueensNewGame()" style="padding:4px 12px;font-size:11px;">New Game</button>
+    </div>
+    <div class="p5-queens-body" id="pq-body">
+      <div style="color:#888;font-size:13px;padding:20px;">Tap New Game to start</div>
+    </div>
+    <div class="p5-queens-status" id="pq-status">Ready</div>
+  </div>
+
+</div><!-- /palm-ui -->
+
+
 <script>
 // ── Win95 Icons ──────────────────────────────────────────────────────────────
 const ICONS = {
@@ -764,13 +1364,13 @@ const ICONS = {
   </svg>`,
 };
 
-// Inject icons
+// Inject icons into Win95 UI
 document.querySelectorAll('[data-icon]').forEach(el => {
   const key = el.dataset.icon;
   if (ICONS[key]) el.innerHTML = ICONS[key];
 });
 
-// ── Window management ────────────────────────────────────────────────────────
+// ── Win95 Window management ──────────────────────────────────────────────────
 const windows = ['about', 'history', 'interests', 'projects', 'contact', 'queens'];
 let zCounter = 100;
 const openWins = new Set();
@@ -849,7 +1449,24 @@ windows.forEach(id => {
   document.addEventListener('mouseup', () => dragging = false);
 });
 
-// ── Queens game ─────────────────────────────────────────────────────────────
+// ── Palm OS navigation ───────────────────────────────────────────────────────
+const palmPanels = ['home', 'about', 'history', 'interests', 'projects', 'contact', 'queens'];
+
+function palmHome() {
+  palmPanels.forEach(p => {
+    document.getElementById('palm-' + p).style.display = 'none';
+  });
+  document.getElementById('palm-home').style.display = 'flex';
+}
+
+function palmOpen(id) {
+  palmPanels.forEach(p => {
+    document.getElementById('palm-' + p).style.display = 'none';
+  });
+  document.getElementById('palm-' + id).style.display = 'flex';
+}
+
+// ── Shared Queens game state ─────────────────────────────────────────────────
 const API = 'https://api.queens.knittedmice.com';
 const REGION_COLORS = [
   '#f4a4a4','#a4c8f4','#a4f4a4','#f4d4a4','#d4a4f4',
@@ -857,7 +1474,7 @@ const REGION_COLORS = [
 ];
 
 let qPuzzle = null;
-let qBoard  = null; // 0=empty 1=queen 2=X
+let qBoard  = null;
 
 async function getQToken() {
   let t = localStorage.getItem('queens_token');
@@ -874,10 +1491,9 @@ async function getQToken() {
   return t;
 }
 
-function openQueens() {
-  toggleWindow('queens');
-}
+function openQueens() { toggleWindow('queens'); }
 
+// ── Win95 Queens ─────────────────────────────────────────────────────────────
 async function queensNewGame() {
   const size  = document.getElementById('q-size').value;
   const stars = document.getElementById('q-stars').value;
@@ -904,7 +1520,6 @@ async function queensNewGame() {
   renderQueensGrid();
   setQStatus(`${qPuzzle.gridSize}×${qPuzzle.gridSize}  ·  ${qPuzzle.stars} star${qPuzzle.stars > 1 ? 's' : ''} per row / col / region`);
 
-  // resize window to fit grid
   const cellSize = qCellSize();
   const gridPx = cellSize * qPuzzle.gridSize + 2;
   document.getElementById('queens-window').style.width = Math.max(300, gridPx + 24) + 'px';
@@ -942,7 +1557,6 @@ function renderQueensGrid() {
     html += '</tr>';
   }
   html += '</table>';
-
   document.getElementById('queens-body').innerHTML = html;
 }
 
@@ -959,12 +1573,155 @@ function qBorders(r, c, regions, size) {
 
 function qClick(r, c) {
   if (!qBoard) return;
-  // empty(0) → X(2) → queen(1) → empty(0)
   qBoard[r][c] = qBoard[r][c] === 0 ? 2 : qBoard[r][c] === 2 ? 1 : 0;
   renderQueensGrid();
   checkQueensWin();
 }
 
+function setQStatus(msg) {
+  document.getElementById('queens-status').textContent = msg;
+}
+
+function qSizeChanged() {
+  const size = document.getElementById('q-size').value;
+  const starsEl = document.getElementById('q-stars');
+  const cur = starsEl.value;
+  const allowed = size === '6' ? ['', '1'] : size === '10' ? ['', '2'] : ['', '1', '2'];
+  starsEl.innerHTML = [['', 'Any'], ['1', '1'], ['2', '2']]
+    .filter(([v]) => allowed.includes(v))
+    .map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+  if (!allowed.includes(cur)) starsEl.value = '';
+}
+
+// ── Palm Queens ──────────────────────────────────────────────────────────────
+let pqPuzzle = null;
+let pqBoard  = null;
+
+async function palmQueensNewGame() {
+  const size  = document.getElementById('pq-size').value;
+  const stars = document.getElementById('pq-stars').value;
+  document.getElementById('pq-status').textContent = 'Loading…';
+  document.getElementById('pq-body').innerHTML =
+    '<div style="color:#888;font-size:13px;padding:20px;">Loading…</div>';
+
+  let token;
+  try { token = await getQToken(); }
+  catch { document.getElementById('pq-status').textContent = 'Could not connect'; return; }
+
+  let url = `${API}/puzzle`;
+  const params = [];
+  if (size)  params.push(`size=${size}`);
+  if (stars) params.push(`stars=${stars}`);
+  if (params.length) url += '?' + params.join('&');
+
+  const res = await fetch(url, { headers: { 'X-API-Token': token } });
+  if (!res.ok) { document.getElementById('pq-status').textContent = 'Failed to load'; return; }
+
+  pqPuzzle = await res.json();
+  pqBoard  = Array.from({ length: pqPuzzle.gridSize }, () => new Array(pqPuzzle.gridSize).fill(0));
+
+  renderPalmQueensGrid();
+  document.getElementById('pq-status').textContent =
+    `${pqPuzzle.gridSize}×${pqPuzzle.gridSize} · ${pqPuzzle.stars} star${pqPuzzle.stars > 1 ? 's' : ''} per row/col/region`;
+}
+
+function pqCellSize() {
+  const w = Math.min(window.innerWidth - 24, 500);
+  return Math.floor(w / (pqPuzzle?.gridSize ?? 8));
+}
+
+function renderPalmQueensGrid() {
+  const { gridSize, regions } = pqPuzzle;
+  const cell = pqCellSize();
+  const conflicts = getPqConflicts();
+
+  let html = `<table class="queens-grid" style="border-collapse:collapse;table-layout:fixed;">`;
+  for (let r = 0; r < gridSize; r++) {
+    html += '<tr>';
+    for (let c = 0; c < gridSize; c++) {
+      const rid   = regions[r][c];
+      const color = REGION_COLORS[rid % REGION_COLORS.length];
+      const state = pqBoard[r][c];
+      const isConflict = conflicts.has(`${r},${c}`);
+      const cls   = state === 1 ? 'q-queen' : state === 2 ? 'q-x' : '';
+      const confCls = isConflict && state === 1 ? ' q-conflict' : '';
+      const xSize = Math.round(cell * 0.36);
+      const xMark = `<svg xmlns="http://www.w3.org/2000/svg" width="${xSize}" height="${xSize}" viewBox="0 0 10 10"><line x1="1" y1="1" x2="9" y2="9" stroke="#707070" stroke-width="1.5"/><line x1="9" y1="1" x2="1" y2="9" stroke="#707070" stroke-width="1.5"/></svg>`;
+      const label = state === 1 ? '♛' : state === 2 ? xMark : '';
+      const fontSize = Math.round(cell * 0.62);
+      const borders = qBorders(r, c, regions, gridSize);
+      html += `<td class="${cls}${confCls}"
+        style="width:${cell}px;height:${cell}px;background:${color};${borders}font-size:${fontSize}px;"
+        onclick="pqClick(${r},${c})"
+      >${label}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+  document.getElementById('pq-body').innerHTML = html;
+}
+
+function pqClick(r, c) {
+  if (!pqBoard) return;
+  pqBoard[r][c] = pqBoard[r][c] === 0 ? 2 : pqBoard[r][c] === 2 ? 1 : 0;
+  renderPalmQueensGrid();
+  checkPqWin();
+}
+
+function getPqConflicts() {
+  if (!pqPuzzle || !pqBoard) return new Set();
+  const { gridSize, regions, stars } = pqPuzzle;
+  const k = stars;
+  const rowQ = new Array(gridSize).fill(0);
+  const colQ = new Array(gridSize).fill(0);
+  const regQ = new Array(gridSize).fill(0);
+  const queens = [];
+  for (let r = 0; r < gridSize; r++)
+    for (let c = 0; c < gridSize; c++)
+      if (pqBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
+  const bad = new Set();
+  for (const [r,c] of queens)
+    if (rowQ[r] > k || colQ[c] > k || regQ[regions[r][c]] > k) bad.add(`${r},${c}`);
+  for (let i = 0; i < queens.length; i++)
+    for (let j = i+1; j < queens.length; j++) {
+      const [r1,c1] = queens[i], [r2,c2] = queens[j];
+      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) { bad.add(`${r1},${c1}`); bad.add(`${r2},${c2}`); }
+    }
+  return bad;
+}
+
+function checkPqWin() {
+  if (!pqPuzzle || !pqBoard) return;
+  const { gridSize, regions, stars } = pqPuzzle;
+  const k = stars;
+  const rowQ = new Array(gridSize).fill(0);
+  const colQ = new Array(gridSize).fill(0);
+  const regQ = new Array(gridSize).fill(0);
+  const queens = [];
+  for (let r = 0; r < gridSize; r++)
+    for (let c = 0; c < gridSize; c++)
+      if (pqBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
+  if (rowQ.some(n => n !== k) || colQ.some(n => n !== k) || regQ.some(n => n !== k)) return;
+  for (let i = 0; i < queens.length; i++)
+    for (let j = i+1; j < queens.length; j++) {
+      const [r1,c1] = queens[i], [r2,c2] = queens[j];
+      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) return;
+    }
+  document.getElementById('pq-status').textContent = '✓ Solved!';
+}
+
+function pqSizeChanged() {
+  const size = document.getElementById('pq-size').value;
+  const starsEl = document.getElementById('pq-stars');
+  const cur = starsEl.value;
+  const allowed = size === '6' ? ['', '1'] : size === '10' ? ['', '2'] : ['', '1', '2'];
+  starsEl.innerHTML = [['', 'Any'], ['1', '1'], ['2', '2']]
+    .filter(([v]) => allowed.includes(v))
+    .map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
+  if (!allowed.includes(cur)) starsEl.value = '';
+}
+
+// ── Conflict check (shared) ──────────────────────────────────────────────────
 function getQConflicts() {
   if (!qPuzzle || !qBoard) return new Set();
   const { gridSize, regions, stars } = qPuzzle;
@@ -973,28 +1730,17 @@ function getQConflicts() {
   const colQ = new Array(gridSize).fill(0);
   const regQ = new Array(gridSize).fill(0);
   const queens = [];
-
-  for (let r = 0; r < gridSize; r++) {
-    for (let c = 0; c < gridSize; c++) {
-      if (qBoard[r][c] === 1) {
-        rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++;
-        queens.push([r, c]);
-      }
-    }
-  }
-
+  for (let r = 0; r < gridSize; r++)
+    for (let c = 0; c < gridSize; c++)
+      if (qBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
   const bad = new Set();
-  for (const [r, c] of queens) {
+  for (const [r,c] of queens)
     if (rowQ[r] > k || colQ[c] > k || regQ[regions[r][c]] > k) bad.add(`${r},${c}`);
-  }
-  for (let i = 0; i < queens.length; i++) {
-    for (let j = i + 1; j < queens.length; j++) {
+  for (let i = 0; i < queens.length; i++)
+    for (let j = i+1; j < queens.length; j++) {
       const [r1,c1] = queens[i], [r2,c2] = queens[j];
-      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) {
-        bad.add(`${r1},${c1}`); bad.add(`${r2},${c2}`);
-      }
+      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) { bad.add(`${r1},${c1}`); bad.add(`${r2},${c2}`); }
     }
-  }
   return bad;
 }
 
@@ -1006,26 +1752,15 @@ function checkQueensWin() {
   const colQ = new Array(gridSize).fill(0);
   const regQ = new Array(gridSize).fill(0);
   const queens = [];
-
-  for (let r = 0; r < gridSize; r++) {
-    for (let c = 0; c < gridSize; c++) {
-      if (qBoard[r][c] === 1) {
-        rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++;
-        queens.push([r, c]);
-      }
-    }
-  }
-
+  for (let r = 0; r < gridSize; r++)
+    for (let c = 0; c < gridSize; c++)
+      if (qBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
   if (rowQ.some(n => n !== k) || colQ.some(n => n !== k) || regQ.some(n => n !== k)) return;
-
-  for (let i = 0; i < queens.length; i++) {
-    for (let j = i + 1; j < queens.length; j++) {
+  for (let i = 0; i < queens.length; i++)
+    for (let j = i+1; j < queens.length; j++) {
       const [r1,c1] = queens[i], [r2,c2] = queens[j];
       if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) return;
     }
-  }
-
-  // Win!
   setQStatus('✓ Solved!');
   const body = document.getElementById('queens-body');
   const overlay = document.createElement('div');
@@ -1042,7 +1777,6 @@ function checkQueensWin() {
         <button class="btn" onclick="this.closest('.queens-win-overlay').remove()">OK</button>
       </div>
     </div>`;
-  // inject icon into the dialog after insertion
   body.style.position = 'relative';
   body.appendChild(overlay);
   overlay.querySelectorAll('[data-icon]').forEach(el => {
@@ -1051,27 +1785,13 @@ function checkQueensWin() {
   });
 }
 
-function qSizeChanged() {
-  const size = document.getElementById('q-size').value;
-  const starsEl = document.getElementById('q-stars');
-  const cur = starsEl.value;
-  // 6→1 only, 8→1 or 2, 10→2 only, any→any
-  const allowed = size === '6' ? ['', '1'] : size === '10' ? ['', '2'] : ['', '1', '2'];
-  starsEl.innerHTML = [
-    ['', 'Any'], ['1', '1'], ['2', '2']
-  ].filter(([v]) => allowed.includes(v))
-   .map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
-  if (!allowed.includes(cur)) starsEl.value = '';
-}
-
-function setQStatus(msg) {
-  document.getElementById('queens-status').textContent = msg;
-}
-
-// Clock
+// ── Clocks ───────────────────────────────────────────────────────────────────
 function updateClock() {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const c = document.getElementById('clock');
+  const p = document.getElementById('palm-clock');
+  if (c) c.textContent = t;
+  if (p) p.textContent = t;
 }
 updateClock();
 setInterval(updateClock, 1000);
