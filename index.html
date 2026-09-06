@@ -583,12 +583,18 @@
         margin-bottom: 16px;
       }
 
+      .p5-photo-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0 8px;
+      }
       .p5-photo {
         display: block;
-        width: 100%;
-        max-height: 200px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
         object-fit: cover;
-        object-position: center top;
+        object-position: 35% 20%;
       }
 
       /* timeline in history panel */
@@ -804,7 +810,7 @@
       <div class="window-body">
         <div class="about-layout">
           <div>
-            <div class="photo-placeholder"><img src="/alex.jpg" alt="Alex Satur" style="width:120px;height:140px;object-fit:cover;object-position:center top;display:block;"></div>
+            <div class="photo-placeholder" style="border-radius:50%;width:120px;height:120px;overflow:hidden;"><img src="/IMG_0917.jpg" alt="Alex Satur" style="width:100%;height:100%;object-fit:cover;object-position:35% 20%;display:block;"></div>
             <div class="photo-caption">alex.jpg</div>
           </div>
           <div class="about-text">
@@ -1114,7 +1120,7 @@
       <span class="p5-back-label">Home</span>
     </div>
     <div class="p5-screen">
-      <img src="/alex.jpg" alt="Alex Satur" class="p5-photo">
+      <div class="p5-photo-wrap"><img src="/IMG_0917.jpg" alt="Alex Satur" class="p5-photo"></div>
       <div class="p5-field-group">
         <div class="p5-field"><span class="p5-field-label">Name</span><span class="p5-field-val" style="font-weight:bold;">Alex Satur</span></div>
         <div class="p5-field"><span class="p5-field-label">Role</span><span class="p5-field-val">Senior Software Developer</span></div>
