@@ -346,62 +346,6 @@
       align-items: center;
     }
 
-    /* ── Queens game ── */
-    .queens-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 6px;
-      background: var(--gray);
-      border-bottom: 1px solid var(--dark-gray);
-    }
-    .queens-toolbar select {
-      font-family: inherit;
-      font-size: 11px;
-      background: white;
-      border: none;
-      box-shadow: var(--sunken);
-      padding: 1px 2px;
-      height: 20px;
-    }
-    .queens-body {
-      padding: 6px;
-      display: flex;
-      justify-content: center;
-      overflow: auto;
-    }
-    .queens-grid td {
-      box-sizing: border-box;
-      cursor: pointer;
-      user-select: none;
-      text-align: center;
-      vertical-align: middle;
-      font-weight: bold;
-    }
-    .queens-grid td:hover { filter: brightness(0.92); }
-    .queens-grid td.q-queen { color: #000; }
-    .queens-grid td.q-x { color: #606060; }
-    .queens-grid td.q-conflict { outline: 2px solid red; outline-offset: -2px; }
-    .queens-win-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(192,192,192,0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-    .queens-win-dialog {
-      background: var(--gray);
-      box-shadow: var(--raised);
-      padding: 0;
-      min-width: 220px;
-      text-align: center;
-    }
-    .queens-win-dialog .title-bar { cursor: default; }
-    .queens-win-dialog-body { padding: 16px 20px 12px; }
-    .queens-win-dialog-body p { margin-bottom: 12px; }
-
     /* ══════════════════════════════════════════════════════
        PALM OS 5 — mobile only (hidden on desktop)
     ══════════════════════════════════════════════════════ */
@@ -678,45 +622,6 @@
         text-decoration: none;
       }
 
-      /* Queens game in palm */
-      .p5-queens-toolbar {
-        background: linear-gradient(to bottom, #d8d4ce, #c8c4be);
-        border-bottom: 1px solid #a0a098;
-        padding: 8px 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        flex-shrink: 0;
-      }
-      .p5-queens-toolbar label { font-size: 12px; color: #444; }
-      .p5-queens-toolbar select {
-        font-family: 'Verdana', sans-serif;
-        font-size: 12px;
-        background: white;
-        border: 1px solid #a0a098;
-        border-radius: 3px;
-        padding: 2px 4px;
-        height: 26px;
-      }
-      .p5-queens-body {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 12px;
-        overflow: auto;
-        background: #f0ede8;
-      }
-      .p5-queens-status {
-        background: linear-gradient(to bottom, #d8d4ce, #c8c4be);
-        border-top: 1px solid #a0a098;
-        padding: 4px 12px;
-        font-size: 11px;
-        color: #555;
-        font-family: 'Verdana', sans-serif;
-        flex-shrink: 0;
-      }
 
       /* Palm toolbar at bottom */
       .p5-toolbar {
@@ -773,10 +678,6 @@
     <div class="desktop-icon" onclick="toggleWindow('contact')">
       <div class="icon-img"><span data-icon="contact"></span></div>
       <div>Contact</div>
-    </div>
-    <div class="desktop-icon" onclick="openQueens()">
-      <div class="icon-img"><span data-icon="queens"></span></div>
-      <div>Queens</div>
     </div>
     <a href="https://dashboard.queens.knittedmice.com" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="desktop-icon">
@@ -987,44 +888,6 @@
       </div>
     </div>
 
-    <!-- Queens -->
-    <div class="window" id="queens-window" style="left:60px;top:40px;width:420px;">
-      <div class="title-bar" id="queens-title">
-        <div class="title-bar-text">
-          <span class="title-bar-icon"><span data-icon="queens"></span></span>
-          Queens
-        </div>
-        <div class="title-bar-controls">
-          <button class="title-btn" onclick="minimizeWindow('queens')">_</button>
-          <button class="title-btn">□</button>
-          <button class="title-btn" onclick="closeWindow('queens')">✕</button>
-        </div>
-      </div>
-      <div class="queens-toolbar">
-        <label style="font-size:11px;">Size:</label>
-        <select id="q-size" onchange="qSizeChanged()">
-          <option value="">Any</option>
-          <option value="6">6×6</option>
-          <option value="8">8×8</option>
-          <option value="10">10×10</option>
-        </select>
-        <label style="font-size:11px;">Stars:</label>
-        <select id="q-stars">
-          <option value="">Any</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-        </select>
-        <button class="btn" onclick="queensNewGame()" style="margin-left:4px;">New Game</button>
-      </div>
-      <div class="queens-body" id="queens-body">
-        <div style="padding:20px;color:var(--dark-gray);font-size:11px;">Click New Game to start</div>
-      </div>
-      <div class="status-bar">
-        <div class="status-item" id="queens-status">Ready</div>
-        <div class="status-item" style="margin-left:auto;">Click: mark X &nbsp;·&nbsp; Click again: place queen &nbsp;·&nbsp; Click again: clear</div>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -1039,7 +902,6 @@
   <button class="taskbar-btn" id="tb-interests" onclick="toggleWindow('interests')" style="display:none"><span data-icon="interests"></span> Interests</button>
   <button class="taskbar-btn" id="tb-projects"  onclick="toggleWindow('projects')"  style="display:none"><span data-icon="projects"></span> Projects</button>
   <button class="taskbar-btn" id="tb-contact"   onclick="toggleWindow('contact')"   style="display:none"><span data-icon="contact"></span> Contact</button>
-  <button class="taskbar-btn" id="tb-queens"    onclick="toggleWindow('queens')"    style="display:none"><span data-icon="queens"></span> Queens</button>
   <div class="taskbar-clock" id="clock"></div>
 </div>
 
@@ -1268,37 +1130,6 @@
     </div>
   </div>
 
-  <!-- Queens panel -->
-  <div id="palm-queens" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
-    <div class="p5-titlebar">
-      <span>Queens</span>
-    </div>
-    <div class="p5-back-bar" onclick="palmHome()">
-      <span class="p5-back-arrow">◀</span>
-      <span class="p5-back-label">Home</span>
-    </div>
-    <div class="p5-queens-toolbar">
-      <label>Size:</label>
-      <select id="pq-size" onchange="pqSizeChanged()">
-        <option value="">Any</option>
-        <option value="6">6×6</option>
-        <option value="8">8×8</option>
-        <option value="10">10×10</option>
-      </select>
-      <label>Stars:</label>
-      <select id="pq-stars">
-        <option value="">Any</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
-      <button class="p5-pill-btn" onclick="palmQueensNewGame()" style="padding:4px 12px;font-size:11px;">New Game</button>
-    </div>
-    <div class="p5-queens-body" id="pq-body">
-      <div style="color:#888;font-size:13px;padding:20px;">Tap New Game to start</div>
-    </div>
-    <div class="p5-queens-status" id="pq-status">Ready</div>
-  </div>
-
   <div class="p5-toolbar" id="palm-toolbar">
     <div class="p5-tool-btn" id="ptb-home" onclick="palmHome()">
       <span class="p5-tool-icon">⊞</span>
@@ -1409,7 +1240,7 @@ document.querySelectorAll('[data-icon]').forEach(el => {
 });
 
 // ── Win95 Window management ──────────────────────────────────────────────────
-const windows = ['about', 'history', 'interests', 'projects', 'contact', 'queens'];
+const windows = ['about', 'history', 'interests', 'projects', 'contact'];
 let zCounter = 100;
 const openWins = new Set();
 const minWins  = new Set();
@@ -1488,7 +1319,7 @@ windows.forEach(id => {
 });
 
 // ── Palm OS navigation ───────────────────────────────────────────────────────
-const palmPanels = ['home', 'about', 'history', 'interests', 'projects', 'contact', 'queens'];
+const palmPanels = ['home', 'about', 'history', 'interests', 'projects', 'contact'];
 
 function palmSetToolbar(active) {
   ['home', 'projects', 'contact'].forEach(id => {
@@ -1510,325 +1341,6 @@ function palmOpen(id) {
   });
   document.getElementById('palm-' + id).style.display = 'flex';
   palmSetToolbar(id);
-}
-
-// ── Shared Queens game state ─────────────────────────────────────────────────
-const API = 'https://api.queens.knittedmice.com';
-const REGION_COLORS = [
-  '#f4a4a4','#a4c8f4','#a4f4a4','#f4d4a4','#d4a4f4',
-  '#f4f4a4','#a4f4d4','#f4a4d4','#a4d4f4','#d4f4a4',
-];
-
-let qPuzzle = null;
-let qBoard  = null;
-
-async function getQToken() {
-  let t = localStorage.getItem('queens_token');
-  if (t) return t;
-  const nick = 'guest_' + Math.random().toString(36).slice(2, 10);
-  const res = await fetch(`${API}/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nickname: nick }),
-  });
-  const data = await res.json();
-  t = data.api_token;
-  localStorage.setItem('queens_token', t);
-  return t;
-}
-
-function openQueens() { toggleWindow('queens'); }
-
-// ── Win95 Queens ─────────────────────────────────────────────────────────────
-async function queensNewGame() {
-  const size  = document.getElementById('q-size').value;
-  const stars = document.getElementById('q-stars').value;
-  setQStatus('Loading…');
-  document.getElementById('queens-body').innerHTML =
-    '<div style="padding:20px;color:var(--dark-gray);font-size:11px;">Loading…</div>';
-
-  let token;
-  try { token = await getQToken(); }
-  catch { setQStatus('Could not connect to API'); return; }
-
-  let url = `${API}/puzzle`;
-  const params = [];
-  if (size)  params.push(`size=${size}`);
-  if (stars) params.push(`stars=${stars}`);
-  if (params.length) url += '?' + params.join('&');
-
-  const res = await fetch(url, { headers: { 'X-API-Token': token } });
-  if (!res.ok) { setQStatus('Failed to load puzzle'); return; }
-
-  qPuzzle = await res.json();
-  qBoard  = Array.from({ length: qPuzzle.gridSize }, () => new Array(qPuzzle.gridSize).fill(0));
-
-  renderQueensGrid();
-  setQStatus(`${qPuzzle.gridSize}×${qPuzzle.gridSize}  ·  ${qPuzzle.stars} star${qPuzzle.stars > 1 ? 's' : ''} per row / col / region`);
-
-  const cellSize = qCellSize();
-  const gridPx = cellSize * qPuzzle.gridSize + 2;
-  document.getElementById('queens-window').style.width = Math.max(300, gridPx + 24) + 'px';
-}
-
-function qCellSize() {
-  return Math.min(50, Math.max(28, Math.floor(400 / (qPuzzle?.gridSize ?? 8))));
-}
-
-function renderQueensGrid() {
-  const { gridSize, regions } = qPuzzle;
-  const cell = qCellSize();
-  const conflicts = getQConflicts();
-
-  let html = `<table class="queens-grid" style="border-collapse:collapse;table-layout:fixed;">`;
-  for (let r = 0; r < gridSize; r++) {
-    html += '<tr>';
-    for (let c = 0; c < gridSize; c++) {
-      const rid   = regions[r][c];
-      const color = REGION_COLORS[rid % REGION_COLORS.length];
-      const state = qBoard[r][c];
-      const isConflict = conflicts.has(`${r},${c}`);
-      const cls   = state === 1 ? 'q-queen' : state === 2 ? 'q-x' : '';
-      const confCls = isConflict && state === 1 ? ' q-conflict' : '';
-      const xSize = Math.round(cell * 0.36);
-      const xMark = `<svg xmlns="http://www.w3.org/2000/svg" width="${xSize}" height="${xSize}" viewBox="0 0 10 10" shape-rendering="crispEdges"><line x1="1" y1="1" x2="9" y2="9" stroke="#707070" stroke-width="1.5"/><line x1="9" y1="1" x2="1" y2="9" stroke="#707070" stroke-width="1.5"/></svg>`;
-      const label = state === 1 ? '♛' : state === 2 ? xMark : '';
-      const fontSize = Math.round(cell * 0.62);
-      const borders = qBorders(r, c, regions, gridSize);
-      html += `<td class="${cls}${confCls}"
-        style="width:${cell}px;height:${cell}px;background:${color};${borders}font-size:${fontSize}px;"
-        onclick="qClick(${r},${c})"
-      >${label}</td>`;
-    }
-    html += '</tr>';
-  }
-  html += '</table>';
-  document.getElementById('queens-body').innerHTML = html;
-}
-
-function qBorders(r, c, regions, size) {
-  const rid = regions[r][c];
-  const heavy = '2px solid #444';
-  const light = '1px solid rgba(0,0,0,0.12)';
-  const top    = (r === 0 || regions[r-1][c] !== rid) ? heavy : light;
-  const left   = (c === 0 || regions[r][c-1] !== rid) ? heavy : light;
-  const bottom = (r === size-1 || regions[r+1][c] !== rid) ? heavy : light;
-  const right  = (c === size-1 || regions[r][c+1] !== rid) ? heavy : light;
-  return `border-top:${top};border-left:${left};border-bottom:${bottom};border-right:${right};`;
-}
-
-function qClick(r, c) {
-  if (!qBoard) return;
-  qBoard[r][c] = qBoard[r][c] === 0 ? 2 : qBoard[r][c] === 2 ? 1 : 0;
-  renderQueensGrid();
-  checkQueensWin();
-}
-
-function setQStatus(msg) {
-  document.getElementById('queens-status').textContent = msg;
-}
-
-function qSizeChanged() {
-  const size = document.getElementById('q-size').value;
-  const starsEl = document.getElementById('q-stars');
-  const cur = starsEl.value;
-  const allowed = size === '6' ? ['', '1'] : size === '10' ? ['', '2'] : ['', '1', '2'];
-  starsEl.innerHTML = [['', 'Any'], ['1', '1'], ['2', '2']]
-    .filter(([v]) => allowed.includes(v))
-    .map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
-  if (!allowed.includes(cur)) starsEl.value = '';
-}
-
-// ── Palm Queens ──────────────────────────────────────────────────────────────
-let pqPuzzle = null;
-let pqBoard  = null;
-
-async function palmQueensNewGame() {
-  const size  = document.getElementById('pq-size').value;
-  const stars = document.getElementById('pq-stars').value;
-  document.getElementById('pq-status').textContent = 'Loading…';
-  document.getElementById('pq-body').innerHTML =
-    '<div style="color:#888;font-size:13px;padding:20px;">Loading…</div>';
-
-  let token;
-  try { token = await getQToken(); }
-  catch { document.getElementById('pq-status').textContent = 'Could not connect'; return; }
-
-  let url = `${API}/puzzle`;
-  const params = [];
-  if (size)  params.push(`size=${size}`);
-  if (stars) params.push(`stars=${stars}`);
-  if (params.length) url += '?' + params.join('&');
-
-  const res = await fetch(url, { headers: { 'X-API-Token': token } });
-  if (!res.ok) { document.getElementById('pq-status').textContent = 'Failed to load'; return; }
-
-  pqPuzzle = await res.json();
-  pqBoard  = Array.from({ length: pqPuzzle.gridSize }, () => new Array(pqPuzzle.gridSize).fill(0));
-
-  renderPalmQueensGrid();
-  document.getElementById('pq-status').textContent =
-    `${pqPuzzle.gridSize}×${pqPuzzle.gridSize} · ${pqPuzzle.stars} star${pqPuzzle.stars > 1 ? 's' : ''} per row/col/region`;
-}
-
-function pqCellSize() {
-  const w = Math.min(window.innerWidth - 24, 500);
-  return Math.floor(w / (pqPuzzle?.gridSize ?? 8));
-}
-
-function renderPalmQueensGrid() {
-  const { gridSize, regions } = pqPuzzle;
-  const cell = pqCellSize();
-  const conflicts = getPqConflicts();
-
-  let html = `<table class="queens-grid" style="border-collapse:collapse;table-layout:fixed;">`;
-  for (let r = 0; r < gridSize; r++) {
-    html += '<tr>';
-    for (let c = 0; c < gridSize; c++) {
-      const rid   = regions[r][c];
-      const color = REGION_COLORS[rid % REGION_COLORS.length];
-      const state = pqBoard[r][c];
-      const isConflict = conflicts.has(`${r},${c}`);
-      const cls   = state === 1 ? 'q-queen' : state === 2 ? 'q-x' : '';
-      const confCls = isConflict && state === 1 ? ' q-conflict' : '';
-      const xSize = Math.round(cell * 0.36);
-      const xMark = `<svg xmlns="http://www.w3.org/2000/svg" width="${xSize}" height="${xSize}" viewBox="0 0 10 10"><line x1="1" y1="1" x2="9" y2="9" stroke="#707070" stroke-width="1.5"/><line x1="9" y1="1" x2="1" y2="9" stroke="#707070" stroke-width="1.5"/></svg>`;
-      const label = state === 1 ? '♛' : state === 2 ? xMark : '';
-      const fontSize = Math.round(cell * 0.62);
-      const borders = qBorders(r, c, regions, gridSize);
-      html += `<td class="${cls}${confCls}"
-        style="width:${cell}px;height:${cell}px;background:${color};${borders}font-size:${fontSize}px;"
-        onclick="pqClick(${r},${c})"
-      >${label}</td>`;
-    }
-    html += '</tr>';
-  }
-  html += '</table>';
-  document.getElementById('pq-body').innerHTML = html;
-}
-
-function pqClick(r, c) {
-  if (!pqBoard) return;
-  pqBoard[r][c] = pqBoard[r][c] === 0 ? 2 : pqBoard[r][c] === 2 ? 1 : 0;
-  renderPalmQueensGrid();
-  checkPqWin();
-}
-
-function getPqConflicts() {
-  if (!pqPuzzle || !pqBoard) return new Set();
-  const { gridSize, regions, stars } = pqPuzzle;
-  const k = stars;
-  const rowQ = new Array(gridSize).fill(0);
-  const colQ = new Array(gridSize).fill(0);
-  const regQ = new Array(gridSize).fill(0);
-  const queens = [];
-  for (let r = 0; r < gridSize; r++)
-    for (let c = 0; c < gridSize; c++)
-      if (pqBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
-  const bad = new Set();
-  for (const [r,c] of queens)
-    if (rowQ[r] > k || colQ[c] > k || regQ[regions[r][c]] > k) bad.add(`${r},${c}`);
-  for (let i = 0; i < queens.length; i++)
-    for (let j = i+1; j < queens.length; j++) {
-      const [r1,c1] = queens[i], [r2,c2] = queens[j];
-      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) { bad.add(`${r1},${c1}`); bad.add(`${r2},${c2}`); }
-    }
-  return bad;
-}
-
-function checkPqWin() {
-  if (!pqPuzzle || !pqBoard) return;
-  const { gridSize, regions, stars } = pqPuzzle;
-  const k = stars;
-  const rowQ = new Array(gridSize).fill(0);
-  const colQ = new Array(gridSize).fill(0);
-  const regQ = new Array(gridSize).fill(0);
-  const queens = [];
-  for (let r = 0; r < gridSize; r++)
-    for (let c = 0; c < gridSize; c++)
-      if (pqBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
-  if (rowQ.some(n => n !== k) || colQ.some(n => n !== k) || regQ.some(n => n !== k)) return;
-  for (let i = 0; i < queens.length; i++)
-    for (let j = i+1; j < queens.length; j++) {
-      const [r1,c1] = queens[i], [r2,c2] = queens[j];
-      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) return;
-    }
-  document.getElementById('pq-status').textContent = '✓ Solved!';
-}
-
-function pqSizeChanged() {
-  const size = document.getElementById('pq-size').value;
-  const starsEl = document.getElementById('pq-stars');
-  const cur = starsEl.value;
-  const allowed = size === '6' ? ['', '1'] : size === '10' ? ['', '2'] : ['', '1', '2'];
-  starsEl.innerHTML = [['', 'Any'], ['1', '1'], ['2', '2']]
-    .filter(([v]) => allowed.includes(v))
-    .map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
-  if (!allowed.includes(cur)) starsEl.value = '';
-}
-
-// ── Conflict check (shared) ──────────────────────────────────────────────────
-function getQConflicts() {
-  if (!qPuzzle || !qBoard) return new Set();
-  const { gridSize, regions, stars } = qPuzzle;
-  const k = stars;
-  const rowQ = new Array(gridSize).fill(0);
-  const colQ = new Array(gridSize).fill(0);
-  const regQ = new Array(gridSize).fill(0);
-  const queens = [];
-  for (let r = 0; r < gridSize; r++)
-    for (let c = 0; c < gridSize; c++)
-      if (qBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
-  const bad = new Set();
-  for (const [r,c] of queens)
-    if (rowQ[r] > k || colQ[c] > k || regQ[regions[r][c]] > k) bad.add(`${r},${c}`);
-  for (let i = 0; i < queens.length; i++)
-    for (let j = i+1; j < queens.length; j++) {
-      const [r1,c1] = queens[i], [r2,c2] = queens[j];
-      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) { bad.add(`${r1},${c1}`); bad.add(`${r2},${c2}`); }
-    }
-  return bad;
-}
-
-function checkQueensWin() {
-  if (!qPuzzle || !qBoard) return;
-  const { gridSize, regions, stars } = qPuzzle;
-  const k = stars;
-  const rowQ = new Array(gridSize).fill(0);
-  const colQ = new Array(gridSize).fill(0);
-  const regQ = new Array(gridSize).fill(0);
-  const queens = [];
-  for (let r = 0; r < gridSize; r++)
-    for (let c = 0; c < gridSize; c++)
-      if (qBoard[r][c] === 1) { rowQ[r]++; colQ[c]++; regQ[regions[r][c]]++; queens.push([r,c]); }
-  if (rowQ.some(n => n !== k) || colQ.some(n => n !== k) || regQ.some(n => n !== k)) return;
-  for (let i = 0; i < queens.length; i++)
-    for (let j = i+1; j < queens.length; j++) {
-      const [r1,c1] = queens[i], [r2,c2] = queens[j];
-      if (Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1) return;
-    }
-  setQStatus('✓ Solved!');
-  const body = document.getElementById('queens-body');
-  const overlay = document.createElement('div');
-  overlay.className = 'queens-win-overlay';
-  overlay.innerHTML = `
-    <div class="queens-win-dialog">
-      <div class="title-bar">
-        <div class="title-bar-text"><span class="title-bar-icon"><span data-icon="queens"></span></span> Queens</div>
-      </div>
-      <div class="queens-win-dialog-body">
-        <p>You solved it!</p>
-        <button class="btn" onclick="queensNewGame();this.closest('.queens-win-overlay').remove()">New Game</button>
-        &nbsp;
-        <button class="btn" onclick="this.closest('.queens-win-overlay').remove()">OK</button>
-      </div>
-    </div>`;
-  body.style.position = 'relative';
-  body.appendChild(overlay);
-  overlay.querySelectorAll('[data-icon]').forEach(el => {
-    const key = el.dataset.icon;
-    if (ICONS[key]) el.innerHTML = ICONS[key];
-  });
 }
 
 // ── Clocks ───────────────────────────────────────────────────────────────────
